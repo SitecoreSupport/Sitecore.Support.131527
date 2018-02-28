@@ -27,6 +27,20 @@
       SegmentedList segmentedList = args.ContactList as SegmentedList;
       if (segmentedList != null && !string.IsNullOrEmpty(segmentedList.Query))
       {
+        if (segmentedList.Source.IncludedListSources.Any<string>() && segmentedList.Source.IncludedListSources.First<string>().Contains('|'))
+        {
+          segmentedList.Source.IncludedListSources = segmentedList.Source.IncludedListSources.First<string>().Split(new char[]
+          {
+            '|'
+          });
+        }
+        if (segmentedList.Source.ExcludedListSources.Any<string>() && segmentedList.Source.ExcludedListSources.First<string>().Contains('|'))
+        {
+          segmentedList.Source.ExcludedListSources=segmentedList.Source.ExcludedListSources.First<string>().Split(new char[]
+          {
+            '|'
+          });
+        }
         args.Contacts = new QueryableProxy<ContactData>(new SegmentedListContactQueryProvider<ContactData>(this.index, this.ruleEngine, segmentedList.Query, segmentedList.Source));
         return;
       }
